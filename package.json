@@ -1,0 +1,41 @@
+{
+  "name": "simple-publishing",
+  "version": "0.0.1",
+  "description": "Simple Publishing API",
+  "author": "Daniel Li <dan@danyll.com> (http://danyll.com/)",
+  "license": "MIT",
+  "private": true,
+  "keywords": [
+    "publishing",
+    "post",
+    "express",
+    "api"
+  ],
+  "repository": "d4nyll/simple-publishing",
+  "homepage": "https://github.com/d4nyll/simple-publishing",
+  "bugs": {
+    "url": "https://github.com/d4nyll/simple-publishing/issues",
+    "email": "dan@danyll.com"
+  },
+  "scripts": {
+    "build": "yarn run fix && yarn run transpile",
+    "fix": "yarn run lint -- --fix",
+    "lint": "eslint src/**",
+    "serve": "yarn run build && node dist/index.js",
+    "transpile": "babel src --out-dir dist --copy-files --source-maps"
+  },
+  "dependencies": {
+    "babel-polyfill": "^6.26.0",
+    "body-parser": "^1.18.2",
+    "dotenv": "^4.0.0",
+    "express": "^4.16.2",
+    "uuid": "^3.1.0"
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "eslint": "^4.12.0",
+    "eslint-config-airbnb-base": "^12.1.0",
+    "eslint-plugin-import": "^2.8.0"
+  }
+}
