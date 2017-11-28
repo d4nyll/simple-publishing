@@ -33,6 +33,7 @@
     "dotenv": "^4.0.0",
     "express": "^4.16.2",
     "http-server": "^0.10.0",
+    "swagger-express-mw": "^0.7.0",
     "uuid": "^3.1.0"
   },
   "devDependencies": {

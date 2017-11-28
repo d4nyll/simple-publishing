@@ -108,7 +108,7 @@ paths:
     /posts:
       x-swagger-router-controller: posts
       post:
-        operationId: createPost
+        operationId: create
         description: Creates a new post and returns the ID of the post
         parameters:
         - name: post
@@ -125,6 +125,7 @@ paths:
           '500':
             $ref: '#/responses/InternalServerError'
     /posts/{postId}:
+      x-swagger-router-controller: posts
       parameters:
       - name: postId
         in: path
@@ -132,8 +133,8 @@ paths:
         type: string
         required: true
       get:
-        description: Retrieves a post by ID
         operationId: retrieve
+        description: Retrieves a post by ID
         responses:
           '200':
             $ref: '#/responses/Success'
@@ -142,8 +143,8 @@ paths:
           '500':
             $ref: '#/responses/InternalServerError'
       delete:
+        operationId: del
         description: Deletes a post by ID
-        operationId: deletePost
         responses:
           '200':
             $ref: '#/responses/Success'
