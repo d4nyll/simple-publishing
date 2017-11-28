@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import fs from 'fs';
 import express from 'express';
 import bodyParser from 'body-parser';
 
@@ -20,6 +21,19 @@ app.delete('/v1/posts/:id', controllers.posts.del);
 
 app.post('/v1/buggy-endpoint', () => {
   throw new Error('Intentional Error');
+});
+
+app.get('/v1/swagger.yaml', (req, res, next) => {
+  fs.readFile(`${__dirname}/../config/swagger/swagger.yaml`, (err, file) => {
+    if (err) {
+      res.status(500);
+      res.end();
+      return next();
+    }
+    res.write(file);
+    res.end();
+    return next();
+  });
 });
 
 app.listen(process.env.API_PORT, () => {
