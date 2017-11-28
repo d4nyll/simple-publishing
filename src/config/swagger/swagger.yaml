@@ -1,1 +1,159 @@
-{}
+swagger: "2.0"
+info:
+  title: Demo Publishing API
+  version: 0.0.1
+  description: The purpose of this API is to demonstrate the steps to integrate an existing Express project with OpenAPI
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  contact:
+    name: Daniel Li
+    url: http://danyll.com/
+    email: dan@danyll.com
+host: localhost:8080
+basePath: /v1
+consumes:
+  - 'application/json'
+produces:
+  - 'text/plain; charset=utf-8'
+  - 'application/json'
+definitions:
+  Post:
+    type: object
+    description: Post Object
+    properties:
+      title:
+        type: string
+      body:
+        type: string
+    required:
+    - title
+    - body
+  GenericError:
+    type: object
+    description: Generic Error Response
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+    required:
+    - code
+    - message
+  ArgumentError:
+    type: object
+    description: Error related to missing or incorrect arguments
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      details:
+        type: object
+        properties:
+          payload:
+            type: array
+            items:
+              type: string
+          params:
+            type: array
+            items:
+              type: string
+          query:
+            type: array
+            items:
+              type: string
+    required:
+      - code
+      - message
+  InvalidContentType:
+    description: The provided payload has the wrong content type
+    type: object
+    properties:
+      code:
+        type: string
+      message:
+        type: string
+      details:
+        type: object
+        properties:
+          received:
+            type: string
+          expected:
+            type: string
+responses:
+  Success:
+    description: Success Response
+  InternalServerError:
+    description: Internal Server Error Response
+    schema:
+      $ref: '#/definitions/GenericError'
+  NotFound:
+    description: Resource cannot be found
+    schema:
+      $ref: '#/definitions/GenericError'
+  MissingArguments:
+    description: One of the required payload properties / sub-properties, URL parameter, and/or query parameters are missing
+    schema:
+      $ref: '#/definitions/ArgumentError'
+  InvalidArguments:
+    description: One of the provided payload properties / sub-properties, URL parameter, and/or query parameters are in the wrong format
+    schema:
+      $ref: '#/definitions/ArgumentError'
+  InvalidContentType:
+    description: The provided payload has the wrong content type
+    schema:
+      $ref: '#/definitions/InvalidContentType'
+paths:
+    /posts:
+      x-swagger-router-controller: posts
+      post:
+        operationId: createPost
+        description: Creates a new post and returns the ID of the post
+        parameters:
+        - name: post
+          in: body
+          description: Title of post
+          required: true
+          schema:
+            $ref: '#/definitions/Post'
+        responses:
+          '200':
+            $ref: '#/responses/Success'
+          '400':
+            $ref: '#/responses/InvalidArguments'
+          '500':
+            $ref: '#/responses/InternalServerError'
+    /posts/{postId}:
+      parameters:
+      - name: postId
+        in: path
+        description: Post ID
+        type: string
+        required: true
+      get:
+        description: Retrieves a post by ID
+        operationId: retrieve
+        responses:
+          '200':
+            $ref: '#/responses/Success'
+          '404':
+            $ref: '#/responses/NotFound'
+          '500':
+            $ref: '#/responses/InternalServerError'
+      delete:
+        description: Deletes a post by ID
+        operationId: deletePost
+        responses:
+          '200':
+            $ref: '#/responses/Success'
+          '404':
+            $ref: '#/responses/NotFound'
+          '500':
+            $ref: '#/responses/InternalServerError'
+    /buggy-endpoint:
+      post:
+        description: Intentionally causes an uncaught error on the server, leading to a restart
+        responses:
+          '500':
+            $ref: '#/responses/InternalServerError'

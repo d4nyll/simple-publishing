@@ -7,6 +7,12 @@ import * as controllers from '../controllers';
 const app = express();
 app.use(bodyParser.json());
 
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Headers', 'Origin, X-Requested-With, Content-Type, Accept');
+  next();
+});
+
 app.post('/v1/posts', controllers.posts.create);
 app.get('/v1/posts', controllers.posts.retrieveAll);
 app.get('/v1/posts/:id', controllers.posts.retrieve);
